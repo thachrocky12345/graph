@@ -17,8 +17,9 @@ matrix_test = Grids(grids, string_input)
 
 first_letter = matrix_test.letters_path[0]
 
-first_path = matrix_test.find_path(first_letter[0], [])
+for row in matrix_test.letters_path:
+    print [str(i) for i in row]
+    print ""
 
-if first_path:
-    for i in first_path:
-        print i
+
+print matrix_test.find_path()

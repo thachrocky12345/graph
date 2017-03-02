@@ -7,6 +7,7 @@ grids = [
 ]
 string_input = 'THACHBUI'
 
+
 class Node(object):
     def __init__(self, x, y, value):
         self.x = x
@@ -14,12 +15,13 @@ class Node(object):
         self.value = value
 
     def is_connect(self, node):
-        if abs(node.x - self.x) <= 1 and abs(node.y - self.y) <= 1 and node.x != self.x:
+        if abs(node.x - self.x) <= 1 and abs(node.y - self.y) <= 1:
             return True
         return False
 
     def __str__(self):
         return "{} - {} - {}".format(self.x, self.y, self.value)
+
 
 class Grids(object):
     _nodes = None
@@ -54,17 +56,21 @@ class Grids(object):
             self._letters.append(temp)
         return self._letters
 
-    def find_path(self, node, path=[]):
+    def find_path(self, row_num=0, col_num=0, path=[]):
 
-        while True:
+        if len(path) == self.string:
+            return path
 
-            path = [self.letters_path[0][1]]
+        working_row = self.letters_path[row_num]
+        working_node = working_row[col_num]
 
-            for nodes, character in zip(self.letters_path[1:], self.string[1:]):
-                for node in nodes:
-                    if node.is_connect(path[-1]) and node.value == character:
-                        path.append(node)
-                        break
+        if len(path) == 0:
+            path = [working_node]
+            self.find_path()
+        if col_num == len(self.letters_path[row_num]) - 1:
+            self.find_path(row_num+1, 0, path)
+
+
 
 
 class Graph(object):
