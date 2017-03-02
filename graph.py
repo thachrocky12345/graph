@@ -1,4 +1,5 @@
 from collections import defaultdict
+import copy
 grids = [
     ['1', 'B', 'a', 'b', 'T'],
     ['T', 'T', 'C', 'H', 'B'],
@@ -56,22 +57,58 @@ class Grids(object):
             self._letters.append(temp)
         return self._letters
 
-    def find_path(self, row_num=0, col_num=0, path=[]):
+    def find_path(self):
+        temporary_paths = copy.deepcopy(self.letters_path)
+        path = []
+        row_index = 0
+        results = []
+        while row_index < len(self.letters_path) and len(self.letters_path[0]) != 0:
 
-        if len(path) == self.string:
-            return path
+            print row_index
 
-        working_row = self.letters_path[row_num]
-        working_node = working_row[col_num]
+            if len(self.letters_path[row_index]) >= 1:
+                current_node = self.letters_path[row_index].pop()
+                # get Node
+            else:
+                print "Done"
+                break
 
-        if len(path) == 0:
-            path = [working_node]
-            self.find_path()
-        if col_num == len(self.letters_path[row_num]) - 1:
-            self.find_path(row_num+1, 0, path)
+            if row_index == 0:
+                path = [current_node]
+                row_index += 1
+                continue
+
+            pre_node = path[-1]
+            if pre_node.is_connect(current_node) is False:
+                print "not connect, index: {}, node: {}".format(row_index, current_node)
+                continue
+            else:
+                print "connect, index: {}, previous_node: {} - node: {}".format(row_index, pre_node, current_node)
+                path.append(current_node)
+
+            print "step: {}".format(row_index), len(path), [str(i.value) for i in path]
+            row_index += 1
+
+            if len(path) == len(self.string):
+                results.append(path)
+                row_index = 0
+                path = []
+
+                if len(self.letters_path[0]) == 0:
+                    return results
+                else:
+                    temporary_paths[0] = self.letters_path[0]
+                    self._letters = temporary_paths
+                    print "end: len: {}".format(len(self.letters_path))
+                    continue
 
 
+        return results
 
+matrix_test = Grids(grids, string_input)
+results =  matrix_test.find_path()
+for path in results:
+    print [str(i.value) for i in path]
 
 class Graph(object):
     """ Graph data structure, undirected by default. """

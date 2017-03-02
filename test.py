@@ -17,9 +17,12 @@ matrix_test = Grids(grids, string_input)
 
 first_letter = matrix_test.letters_path[0]
 
-for row in matrix_test.letters_path:
-    print [str(i) for i in row]
-    print ""
 
 
 print matrix_test.find_path()
+
+for i, value in enumerate(matrix_test.string):
+    print i ,value
+
+while len(grids) != 0:
+    print grids.pop()
